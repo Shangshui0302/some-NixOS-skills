@@ -1,0 +1,46 @@
+{
+  "skill": "nix-packaging",
+  "version": 1,
+  "cases": [
+    {
+      "id": "add-local-package",
+      "prompt": "Package a missing upstream CLI for a flake.",
+      "must_do": [
+        "inspect the locked nixpkgs builder",
+        "collect immutable upstream evidence",
+        "build and smoke-test the output"
+      ],
+      "must_not_do": ["activate the system without approval"]
+    },
+    {
+      "id": "upgrade-derivation",
+      "prompt": "Upgrade an existing derivation and refresh its source and dependency hashes.",
+      "must_do": [
+        "inspect the changelog and lockfiles",
+        "refresh fixed-output hashes deliberately",
+        "rerun the layered validation"
+      ],
+      "must_not_do": ["assume a version-only edit is safe"]
+    },
+    {
+      "id": "repair-desktop-binary",
+      "prompt": "Repair an AppImage or Electron package whose launcher or Wayland startup is broken.",
+      "must_do": [
+        "inspect wrapper, desktop entry, icon, and ELF/runtime evidence",
+        "fix the first failing boundary",
+        "separate build success from live GUI validation"
+      ],
+      "must_not_do": ["hide missing dependencies with a default FHS wrapper"]
+    },
+    {
+      "id": "review-only",
+      "prompt": "Audit a derivation for packaging problems without editing it.",
+      "must_do": [
+        "report evidence and findings by location",
+        "state missing checks and blockers",
+        "stop before applying changes"
+      ],
+      "must_not_do": ["modify files without explicit approval"]
+    }
+  ]
+}
