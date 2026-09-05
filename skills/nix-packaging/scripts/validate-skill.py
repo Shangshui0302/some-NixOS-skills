@@ -74,9 +74,29 @@ def main() -> int:
             if not isinstance(cases, list) or len(cases) < 3:
                 failures.append("evals.json must contain at least three cases")
             else:
+                seen_ids: set[str] = set()
                 for index, case in enumerate(cases):
-                    if not isinstance(case, dict) or not case.get("id") or not case.get("prompt"):
+                    if not isinstance(case, dict):
+                        failures.append(f"eval case {index} must be an object")
+                        continue
+
+                    case_id = case.get("id")
+                    prompt = case.get("prompt")
+                    if not isinstance(case_id, str) or not case_id.strip() or not isinstance(prompt, str) or not prompt.strip():
                         failures.append(f"eval case {index} needs id and prompt")
+                    elif case_id in seen_ids:
+                        failures.append(f"eval case {index} duplicates id: {case_id}")
+                    else:
+                        seen_ids.add(case_id)
+
+                    for field in ("must_do", "must_not_do"):
+                        values = case.get(field)
+                        if (
+                            not isinstance(values, list)
+                            or not values
+                            or any(not isinstance(value, str) or not value.strip() for value in values)
+                        ):
+                            failures.append(f"eval case {index} needs a non-empty string list: {field}")
         except (OSError, json.JSONDecodeError) as exc:
             failures.append(f"cannot parse evals/evals.json: {exc}")
 
