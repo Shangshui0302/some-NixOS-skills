@@ -17,10 +17,43 @@ REQUIRED_HEADINGS = (
     "## Anti-patterns",
     "## Delivery format",
 )
+MARKDOWN_LINK_RE = re.compile(r"(?<!\!)\[[^\]]+\]\(\s*(?:<([^>]+)>|([^\s)]+))")
 
 
 def error(message: str) -> None:
     print(f"error: {message}", file=sys.stderr)
+
+
+def check_markdown_links(root: Path, failures: list[str]) -> None:
+    """Check relative Markdown links without trying to fetch external URLs."""
+
+    for markdown_file in sorted(root.rglob("*.md")):
+        text = markdown_file.read_text(encoding="utf-8")
+        for match in MARKDOWN_LINK_RE.finditer(text):
+            target = match.group(1) or match.group(2)
+            if not target or target.startswith(("#", "/", "http://", "https://", "mailto:")):
+                continue
+
+            target = target.split("#", 1)[0].split("?", 1)[0]
+            if not target:
+                continue
+
+            candidate = (markdown_file.parent / target).resolve()
+            try:
+                candidate.relative_to(root)
+            except ValueError:
+                line = text.count("\n", 0, match.start()) + 1
+                failures.append(
+                    f"Markdown link escapes skill directory: "
+                    f"{markdown_file.relative_to(root)}:{line}: {target}"
+                )
+            else:
+                if not candidate.exists():
+                    line = text.count("\n", 0, match.start()) + 1
+                    failures.append(
+                        f"Markdown link does not exist: "
+                        f"{markdown_file.relative_to(root)}:{line}: {target}"
+                    )
 
 
 def main() -> int:
@@ -63,6 +96,8 @@ def main() -> int:
         candidate = root / relative.rstrip("`'.,)")
         if not candidate.exists():
             failures.append(f"referenced path does not exist: {relative}")
+
+    check_markdown_links(root, failures)
 
     evals_file = root / "evals" / "evals.json"
     if not evals_file.is_file():

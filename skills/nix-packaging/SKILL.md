@@ -61,7 +61,7 @@ Copy this checklist into the working notes and mark it as the task advances:
 
 ## Freshness gate
 
-Load `references/freshness-and-evidence.md` before selecting a builder or writing a
+Load [references/freshness-and-evidence.md](references/freshness-and-evidence.md) before selecting a builder or writing a
 new hash. Use `gh` for GitHub investigations. Prefer the locked `nixpkgs` source for
 API facts, and use current official Nixpkgs/nix.dev documentation to detect process
 changes. When they disagree, pause and explain whether the change is lock-compatible,
@@ -69,7 +69,7 @@ requires a lock update, or should remain a documented exception.
 
 ## Builder and implementation routing
 
-Load only the relevant section of `references/builder-routing.md` after the evidence
+Load only the relevant section of [references/builder-routing.md](references/builder-routing.md) after the evidence
 step. Do not add a broad dependency set to hide an unknown phase failure. Prefer a
 source build when it is maintainable; use a release binary or AppImage only when the
 upstream source route is unavailable or materially less reliable.
@@ -80,7 +80,7 @@ inspect architecture, interpreter, `NEEDED` libraries, and bundled component lic
 
 ## Validation
 
-Load `references/validation.md` for the package-type matrix and output checks. A
+Load [references/validation.md](references/validation.md) for the package-type matrix and output checks. A
 typical flake-backed package uses:
 
 ```bash
@@ -101,14 +101,14 @@ deterministic lint, not a substitute for building the target package.
 
 ## Upgrades and freshness maintenance
 
-Load `references/update-policy.md` for repeat updates. Pin source and documentation
+Load [references/update-policy.md](references/update-policy.md) for repeat updates. Pin source and documentation
 inputs, make update checks explicit, and keep automatic work read-only by default.
 An automated job may open a reviewable update change after checks pass; it must not
 silently rewrite a skill, switch a system, commit, or push.
 
 ## Three concrete request shapes
 
-Load `references/examples.md` when the request is ambiguous. The minimum supported
+Load [references/examples.md](references/examples.md) when the request is ambiguous. The minimum supported
 shapes are: add a missing local package from an upstream release; upgrade an existing
 derivation and refresh source/dependency hashes; and repair a prebuilt/AppImage,
 Electron, font/theme, or plugin package while proving its output and integration.

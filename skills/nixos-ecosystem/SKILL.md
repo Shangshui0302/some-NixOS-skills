@@ -32,14 +32,14 @@ Load only the reference matching the task:
 
 | Task signal | Load | Main result |
 | --- | --- | --- |
-| Nix language, flake, input, lock, dev shell | `references/nix-core-and-flakes.md` | Version-aware evaluation and input plan |
-| NixOS modules, Home Manager, profiles | `references/configuration-and-home.md` | Correct ownership and module composition |
-| rebuild, test, switch, generation, rollback, recovery | `references/system-lifecycle.md` | Safe state transition plan |
-| hardware, boot, disk, persistence, encryption, secrets | `references/hardware-storage-secrets.md` | Preflight and recovery-aware system design |
-| service, systemd, desktop, graphics, network | `references/services-and-desktop.md` | Declarative service and runtime diagnosis |
-| installation, remote host, fleet, VM, container | `references/deployment-and-testing.md` | Targeted deployment or isolated test |
-| CI, cache, update, formatter, lint, review | `references/ci-updates-and-cache.md` | Reproducible maintenance pipeline |
-| Darwin, Android, or another non-NixOS host | `references/cross-platform.md` | Platform-specific boundary and fallback |
+| Nix language, flake, input, lock, dev shell | [references/nix-core-and-flakes.md](references/nix-core-and-flakes.md) | Version-aware evaluation and input plan |
+| NixOS modules, Home Manager, profiles | [references/configuration-and-home.md](references/configuration-and-home.md) | Correct ownership and module composition |
+| rebuild, test, switch, generation, rollback, recovery | [references/system-lifecycle.md](references/system-lifecycle.md) | Safe state transition plan |
+| hardware, boot, disk, persistence, encryption, secrets | [references/hardware-storage-secrets.md](references/hardware-storage-secrets.md) | Preflight and recovery-aware system design |
+| service, systemd, desktop, graphics, network | [references/services-and-desktop.md](references/services-and-desktop.md) | Declarative service and runtime diagnosis |
+| installation, remote host, fleet, VM, container | [references/deployment-and-testing.md](references/deployment-and-testing.md) | Targeted deployment or isolated test |
+| CI, cache, update, formatter, lint, review | [references/ci-updates-and-cache.md](references/ci-updates-and-cache.md) | Reproducible maintenance pipeline |
+| Darwin, Android, or another non-NixOS host | [references/cross-platform.md](references/cross-platform.md) | Platform-specific boundary and fallback |
 
 ## Progress checklist
 
@@ -79,7 +79,7 @@ read-only inspection.
 
 ## Version-aware option lookup
 
-Load `references/nix-core-and-flakes.md` before using an unfamiliar option or API. Do
+Load [references/nix-core-and-flakes.md](references/nix-core-and-flakes.md) before using an unfamiliar option or API. Do
 not invent `services.*`, `systemd.*`, Home Manager, or flake output names. Prefer the
 locked source, `nix eval`, `nixos-option` on the target host, version-matched manuals,
 or a language server backed by the same inputs. Record the version that supports the
@@ -87,28 +87,28 @@ answer.
 
 ## Configuration ownership
 
-Load `references/configuration-and-home.md` when a change could fit both system and
+Load [references/configuration-and-home.md](references/configuration-and-home.md) when a change could fit both system and
 user scope. Keep one owner for each package, file, service, environment variable,
 and desktop integration. A shared module may be imported by multiple hosts, but a
 host-specific workaround must not leak into the common layer without evidence.
 
 ## Lifecycle and recovery
 
-Load `references/system-lifecycle.md` before building or activating a system. Use
+Load [references/system-lifecycle.md](references/system-lifecycle.md) before building or activating a system. Use
 `parse → eval → dry-build → test/VM → activate → observe` as separate claims. Treat
 boot, kernel, display, network, firewall, secrets, disk, and remote deployment as
 high-risk changes with explicit rollback and rescue procedures.
 
 ## State, secrets, and destructive operations
 
-Load `references/hardware-storage-secrets.md` for disks, persistence, encryption,
+Load [references/hardware-storage-secrets.md](references/hardware-storage-secrets.md) for disks, persistence, encryption,
 impermanence, agenix, or sops-nix. Never print secret contents or put them in Nix
 evaluation output. Never run a disk formatter or unattended installer until the
 target identity, backup state, exact disk, and destructive effect have been confirmed.
 
 ## Services and runtime proof
 
-Load `references/services-and-desktop.md` for systemd, desktop sessions, graphics,
+Load [references/services-and-desktop.md](references/services-and-desktop.md) for systemd, desktop sessions, graphics,
 audio, input, networking, or user services. Prefer the native module when it exists,
 but verify generated units, ordering, permissions, environment, and logs. A dry-build
 does not prove that a compositor plugin, Wayland session, media player, or service is
@@ -116,21 +116,21 @@ healthy after activation.
 
 ## Deployment and isolated tests
 
-Load `references/deployment-and-testing.md` for `nixos-anywhere`, disko, deploy-rs,
+Load [references/deployment-and-testing.md](references/deployment-and-testing.md) for `nixos-anywhere`, disko, deploy-rs,
 Colmena, NixOS VM tests, containers, or microVMs. Select the smallest safe target:
 local VM, disposable host, canary, one remote node, then fleet. Do not treat a
 parallel deployment tool as permission to deploy.
 
 ## CI, updates, and caches
 
-Load `references/ci-updates-and-cache.md` for format/lint checks, flake input updates,
+Load [references/ci-updates-and-cache.md](references/ci-updates-and-cache.md) for format/lint checks, flake input updates,
 package update scripts, dependency impact, Hydra/Cachix/Attic, or large evaluations.
 Keep updates reviewable: detect, propose, check, then merge. Do not silently update
 the skill or mutate a user's system.
 
 ## Cross-platform boundary
 
-Load `references/cross-platform.md` for nix-darwin, Nix-on-Droid, non-NixOS Linux,
+Load [references/cross-platform.md](references/cross-platform.md) for nix-darwin, Nix-on-Droid, non-NixOS Linux,
 or mixed-host flakes. Separate portable Nix/Home Manager code from platform modules;
 do not assume `nixos-rebuild`, systemd, or Linux paths exist everywhere.
 
