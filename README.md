@@ -33,6 +33,9 @@ python3 skills/nix-packaging/scripts/validate-skill.py skills/nix-packaging
 python3 skills/nix-packaging/scripts/validate-skill.py skills/nixos-ecosystem
 ```
 
+The same structural checks, flake checks, and three package outputs run in
+`.github/workflows/ci.yml` when this repository is connected to GitHub.
+
 The per-skill outputs and `all-skills` contain complete trees under
 `share/agent-skills/<name>/`. Copy or wire those directories into an agent runtime
 only through the host's normal configuration mechanism. Adding a new skill requires
