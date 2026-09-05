@@ -11,7 +11,8 @@ This project provides two installable Agent Skills for developing Nix packages, 
 ## 目录 / Contents
 
 - [Skills / 技能](#skills--技能)
-- [项目级原生安装 / Project-level native installation](#项目级原生安装--project-level-native-installation)
+- [1. 原生 Agent Skills 安装 / Native installation](#1-原生-agent-skills-安装--native-installation)
+- [2. Nix + Home Manager 安装 / Nix + Home Manager installation](#2-nix--home-manager-安装--nix--home-manager-installation)
 - [许可证 / License](#许可证--license)
 
 ## Skills / 技能
@@ -22,20 +23,20 @@ This project provides two installable Agent Skills for developing Nix packages, 
 - `nix-packaging`: develop, upgrade, repair, and verify Nix packages.
 - `nixos-ecosystem`: manage Nix, NixOS, Home Manager, services, deployment, and recovery workflows.
 
-## 项目级原生安装 / Project-level native installation
+## 1. 原生 Agent Skills 安装 / Native installation
 
 ### 命令行 / CLI
 
-在目标项目根目录运行跨 Agent 的 [`skills` CLI](https://github.com/vercel-labs/skills)，安装到该项目的 `.agents/skills`：
+使用跨 Agent 的 [`skills` CLI](https://github.com/vercel-labs/skills) 安装到用户级目录：
 
-Run the cross-agent [`skills` CLI](https://github.com/vercel-labs/skills) from the target project root. It installs both skills into that project's `.agents/skills`:
+Use the cross-agent [`skills` CLI](https://github.com/vercel-labs/skills) to install both skills globally:
 
 ```bash
-cd /path/to/your/project
 npx skills add \
-  Shangshui0302/some-NixOS-skills \
+  https://github.com/Shangshui0302/some-NixOS-skills \
   --skill nix-packaging \
   --skill nixos-ecosystem \
+  --global \
   --agent '*' \
   --yes
 ```
@@ -47,16 +48,64 @@ npx skills add \
 Send the following prompt to a coding agent that supports Agent Skills:
 
 ```text
-请在当前项目根目录使用你自己的 Agent Skills 原生安装机制，从
+请使用你自己的 Agent Skills 原生安装机制，从
 https://github.com/Shangshui0302/some-NixOS-skills
-以 project scope 安装 nix-packaging 和 nixos-ecosystem，覆盖项目已有的 Nix/NixOS skill。
-安装完成后确认两个 skill 都能被发现。不要使用 Nix、flake 或 global scope。
+安装 nix-packaging 和 nixos-ecosystem，使用用户级/global scope。
+安装完成后确认两个 skill 都能被发现。不要使用 Nix，也不要把仓库内容复制到项目目录。
 
-Use your native Agent Skills installation mechanism from the current project root to install
+Use your native Agent Skills installation mechanism to install
 nix-packaging and nixos-ecosystem from
 https://github.com/Shangshui0302/some-NixOS-skills
-with project scope, replacing the project's existing Nix/NixOS skills.
-Verify that both skills are discoverable afterwards. Do not use Nix, flakes, or global scope.
+for the user/global scope. Verify that both skills are discoverable afterwards.
+Do not use Nix or copy the repository into the project directory.
+```
+
+## 2. Nix + Home Manager 安装 / Nix + Home Manager installation
+
+通过 Home Manager 声明式安装。flake input 文件位于 `/nix/store`，Home Manager generation 会为每个 skill 建立符号链接到用户目录，默认目标是 `~/.agents/skills`。
+
+Install declaratively through Home Manager. The flake input lives in `/nix/store`, and the Home Manager generation creates one symlink per skill in the user directory. The default target is `~/.agents/skills`.
+
+先在 NixOS flake 中添加 input：
+
+Add the input to your NixOS flake:
+
+```nix
+inputs.some-nixos-skills = {
+  url = "github:Shangshui0302/some-NixOS-skills";
+  inputs.nixpkgs.follows = "nixpkgs";
+};
+```
+
+然后在现有的 Home Manager 用户模块中导入并启用：
+
+Then import and enable it in your existing Home Manager user module:
+
+```nix
+{ inputs, ... }:
+{
+  imports = [ inputs.some-nixos-skills.homeManagerModules.default ];
+
+  programs.some-nixos-skills.enable = true;
+}
+```
+
+生成后得到：
+
+The resulting links are:
+
+```text
+~/.agents/skills/nix-packaging
+~/.agents/skills/nixos-ecosystem
+        -> /nix/store/...-source/skills/<skill>
+```
+
+如需使用其他 Agent 的目录，只覆盖安装路径；路径始终相对于用户 Home：
+
+To use another Agent directory, override only the install path. The path is relative to the user Home:
+
+```nix
+programs.some-nixos-skills.installPath = ".claude/skills";
 ```
 
 ## 许可证 / License
