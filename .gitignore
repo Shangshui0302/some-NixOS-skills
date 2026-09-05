@@ -1,0 +1,7 @@
+.direnv/
+result
+result-*
+*.swp
+*~
+__pycache__/
+*.py[cod]
