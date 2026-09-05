@@ -1,5 +1,5 @@
 {
-  description = "Composable Nix and NixOS ecosystem skills for coding agents";
+  description = "some-NixOS-skills: composable Nix and NixOS skills for coding agents";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
