@@ -4,130 +4,112 @@
 [![Nix](https://img.shields.io/badge/Nix-flakes-5277C3.svg)](https://nixos.org/)
 [![NixOS](https://img.shields.io/badge/NixOS-workflows-5277C3.svg)](https://nixos.org/)
 
-面向 coding agent 的证据驱动 Nix 与 NixOS skill 集合。它覆盖 Nix 打包、配置、部署、测试、恢复和持续维护。
+本项目提供两个可安装的 Agent Skills，帮助 coding agent 开发 Nix 包、管理 NixOS 配置，并分层验证构建与部署结果。
 
-Evidence-driven Nix and NixOS skills for coding agents. The project covers packaging, configuration, deployment, testing, recovery, and ongoing maintenance.
+This project provides two installable Agent Skills for developing Nix packages, managing NixOS configurations, and separating build evidence from deployment results.
 
-**GitHub topics / GitHub 主题：** `nix` `nixos` `nix-flakes` `home-manager` `agent-skills` `declarative-configuration` `continuous-integration`
+## 目录 / Contents
 
-## Table of Contents / 目录
+- [Skills / 技能](#skills--技能)
+- [1. 原生 Agent Skills 安装 / Native installation](#1-原生-agent-skills-安装--native-installation)
+- [2. Nix + Home Manager 安装 / Nix + Home Manager installation](#2-nix--home-manager-安装--nix--home-manager-installation)
+- [许可证 / License](#许可证--license)
 
-- [Overview / 概览](#overview)
-- [Skills / 技能](#skills)
-- [Use / 使用](#use)
-- [Distribution / 分发](#distribution)
-- [Freshness and updates / 新鲜度与更新](#freshness-and-updates)
-- [Design principles / 设计原则](#design-principles)
-- [Scope and safety / 范围与安全](#scope-and-safety)
-- [License / 许可证](#license)
+## Skills / 技能
 
-## Overview
+- `nix-packaging`：开发、升级、修复和验证 Nix package。
+- `nixos-ecosystem`：管理 Nix、NixOS、Home Manager、服务、部署和恢复流程。
 
-**概览：** 本项目不是 NixOS 模块、软件包仓库或自动安装器，而是一套可复用的工作流程 skill。每个 `skills/<name>/` 目录都是稳定的 consumer-facing 接口，flake 会自动发现其中包含 `SKILL.md` 的目录。
+- `nix-packaging`: develop, upgrade, repair, and verify Nix packages.
+- `nixos-ecosystem`: manage Nix, NixOS, Home Manager, services, deployment, and recovery workflows.
 
-**English:** This project is a reusable workflow skill set, not a NixOS module, package registry, or automatic installer. Each `skills/<name>/` directory is a stable consumer-facing interface, and the flake discovers every directory containing `SKILL.md`.
+## 1. 原生 Agent Skills 安装 / Native installation
 
-## Skills
+### 命令行 / CLI
 
-| Skill | 中文用途 | English use |
-| --- | --- | --- |
-| `nix-packaging` | 添加、升级、修复或审查 Nix derivation，并验证构建产物和运行时边界。 | Add, upgrade, repair, or review Nix derivations and their build/runtime evidence. |
-| `nixos-ecosystem` | 管理 Nix、NixOS、Home Manager、硬件、Secrets、服务、VM、部署、CI 和跨平台边界。 | Manage Nix, NixOS, Home Manager, hardware, secrets, services, VMs, deployment, CI, and cross-platform boundaries. |
+使用跨 Agent 的 [`skills` CLI](https://github.com/vercel-labs/skills) 安装到用户级目录：
 
-`nixos-ecosystem` 是工作流路由器，不是安装器，也不替代版本匹配的官方手册。
-
-`nixos-ecosystem` is a workflow router, not an installer or a replacement for version-matched official manuals.
-
-## Use
-
-**在仓库根目录运行 / Run from the repository root:**
+Use the cross-agent [`skills` CLI](https://github.com/vercel-labs/skills) to install both skills globally:
 
 ```bash
-nix flake check
-nix build .#nix-packaging
-nix build .#nixos-ecosystem
-nix build .#all-skills
-
-python3 skills/nix-packaging/scripts/validate-skill.py skills/nix-packaging
-python3 skills/nix-packaging/scripts/validate-skill.py skills/nixos-ecosystem
+npx skills add \
+  https://github.com/Shangshui0302/some-NixOS-skills \
+  --skill nix-packaging \
+  --skill nixos-ecosystem \
+  --global \
+  --agent '*' \
+  --yes
 ```
 
-这些命令分别检查 flake、构建单个或全部 skill，并验证 skill 结构。
+### Prompt
 
-These commands check the flake, build individual or aggregate skill outputs, and validate skill structure.
+把下面的提示词发给支持 Agent Skills 的 coding agent：
 
-主机集成应通过宿主的正常配置机制完成；仓库不会未经授权修改 `~/.codex/skills` 或其他用户目录。
+Send the following prompt to a coding agent that supports Agent Skills:
 
-Host integration should use the host's normal configuration mechanism; this repository never modifies `~/.codex/skills` or another user directory without authorization.
+```text
+请使用你自己的 Agent Skills 原生安装机制，从
+https://github.com/Shangshui0302/some-NixOS-skills
+安装 nix-packaging 和 nixos-ecosystem，使用用户级/global scope。
+安装完成后确认两个 skill 都能被发现。不要使用 Nix，也不要把仓库内容复制到项目目录。
 
-## Distribution
-
-flake 暴露以下 package output：
-
-The flake exposes these package outputs:
-
-- `.#nix-packaging`
-- `.#nixos-ecosystem`
-- `.#all-skills`
-- `.#default`（等同于 `.#all-skills` / equivalent to `.#all-skills`）
-
-例如：
-
-For example:
-
-```bash
-nix profile install .#nix-packaging
+Use your native Agent Skills installation mechanism to install
+nix-packaging and nixos-ecosystem from
+https://github.com/Shangshui0302/some-NixOS-skills
+for the user/global scope. Verify that both skills are discoverable afterwards.
+Do not use Nix or copy the repository into the project directory.
 ```
 
-构建产物位于 `/nix/store/.../share/agent-skills/<name>/`。这提供可复现的 Nix 分发入口，但不会自动注册或覆盖 Agent 的 skill 目录。
+## 2. Nix + Home Manager 安装 / Nix + Home Manager installation
 
-Built outputs live under `/nix/store/.../share/agent-skills/<name>/`. This provides a reproducible Nix distribution entry point, but it does not automatically register or overwrite an Agent skill directory.
+通过 Home Manager 声明式安装。flake input 文件位于 `/nix/store`，Home Manager generation 会为每个 skill 建立符号链接到用户目录，默认目标是 `~/.agents/skills`。
 
-## Freshness and updates
+Install declaratively through Home Manager. The flake input lives in `/nix/store`, and the Home Manager generation creates one symlink per skill in the user directory. The default target is `~/.agents/skills`.
 
-**新鲜度门禁：** 每个适用任务都要读取锁定输入，并在使用陌生选项或 API 前核对版本匹配的官方文档。
+先在 NixOS flake 中添加 input：
 
-**Freshness gate:** Every applicable task reads locked inputs and checks version-matched official documentation before using an unfamiliar option or API.
+Add the input to your NixOS flake:
 
-本地报告：
-
-Local report:
-
-```bash
-python3 scripts/check-freshness.py
+```nix
+inputs.some-nixos-skills = {
+  url = "github:Shangshui0302/some-NixOS-skills";
+  inputs.nixpkgs.follows = "nixpkgs";
+};
 ```
 
-`.github/workflows/freshness.yml` 每周或手动运行：它在临时路径生成候选 `nixpkgs` lock，执行 freshness 报告、flake 检查和 skill 构建；发现 lock 漂移或文档复核到期时要求人工审阅。
+然后在现有的 Home Manager 用户模块中导入并启用：
 
-`.github/workflows/freshness.yml` runs weekly or by manual dispatch. It creates a candidate `nixpkgs` lock in a temporary path, runs the freshness report, checks the flake, and builds the skills; lock drift or an overdue documentation review requires human review.
+Then import and enable it in your existing Home Manager user module:
 
-自动化不会修改真实 `flake.lock`、提交、推送、创建 PR、激活系统或删除 generation。日期检查是提醒器，不是网页语义 diff；Agent 仍必须阅读当前官方文档。
+```nix
+{ inputs, ... }:
+{
+  imports = [ inputs.some-nixos-skills.homeManagerModules.default ];
 
-Automation does not modify the real `flake.lock`, commit, push, open a PR, activate a system, or delete generations. The date check is a reminder rather than a semantic web-page diff; the Agent must still read current official documentation.
+  programs.some-nixos-skills.enable = true;
+}
+```
 
-## Design principles
+生成后得到：
 
-- **证据优先 / Evidence first：** 先记录锁定输入、版本匹配接口和不可变上游事实，再编辑。
-- **分层验证 / Layered validation：** 区分 parse/eval、build、dry-build、VM、activation 和 live runtime。
-- **渐进加载 / Progressive disclosure：** `SKILL.md` 负责路由，详细规则只在任务需要时加载。
-- **声明式分发 / Declarative distribution：** flake 提供不可变的 skill 产物，消费者自行 pin 和集成。
-- **人工确认边界 / Human approval boundaries：** activation、远程部署、commit、push 和 PR 创建都需要明确授权。
-- **可审阅更新 / Reviewable updates：** freshness 只发现和报告变化，不静默改写本地规则。
+The resulting links are:
 
-## Scope and safety
+```text
+~/.agents/skills/nix-packaging
+~/.agents/skills/nixos-ecosystem
+        -> /nix/store/...-source/skills/<skill>
+```
 
-这些 skill 指导 Agent 收集证据、选择最小实现、保留所有权和恢复边界，并准确报告验证层级。它们不会默示允许执行：
+如需使用其他 Agent 的目录，只覆盖安装路径；路径始终相对于用户 Home：
 
-These skills guide agents to gather evidence, choose the smallest implementation, preserve ownership and recovery boundaries, and report validation layers precisely. They never imply permission to:
+To use another Agent directory, override only the install path. The path is relative to the user Home:
 
-- `nixos-rebuild switch`
-- 远程部署 / remote deployment
-- 磁盘格式化 / disk formatting
-- 删除 generation 或垃圾回收 / deleting generations or garbage collection
-- 未经授权的 commit、push 或 PR / unauthorized commit, push, or pull request
+```nix
+programs.some-nixos-skills.installPath = ".claude/skills";
+```
 
-## License
+## 许可证 / License
 
-本项目采用 [0BSD（Zero-Clause BSD）](LICENSE)，这是宽松、无署名义务的开源许可证。
+本项目采用 [0BSD（Zero-Clause BSD）](LICENSE)。
 
-This project is released under the [0BSD (Zero-Clause BSD)](LICENSE), a highly permissive license with no attribution requirement.
+Released under the permissive [0BSD (Zero-Clause BSD)](LICENSE) license.
