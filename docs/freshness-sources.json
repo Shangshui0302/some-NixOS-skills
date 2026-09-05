@@ -15,15 +15,6 @@
       ]
     },
     {
-      "id": "home-manager-locked-api",
-      "input": "home-manager",
-      "url": "https://github.com/nix-community/home-manager",
-      "last_reviewed": "2026-09-05",
-      "references": [
-        "skills/nixos-ecosystem/references/configuration-and-home.md"
-      ]
-    },
-    {
       "id": "nix-manual",
       "url": "https://nix.dev/manual/nix/latest/",
       "last_reviewed": "2026-09-05",
