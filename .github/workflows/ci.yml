@@ -19,6 +19,9 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@13d8dd58da0234aa297dedd986986ccb8e7f3e24 # v31.11.1
 
+      - name: Record Nix version
+        run: nix --version
+
       - name: Validate skill structure
         run: |
           nix develop --command python3 skills/nix-packaging/scripts/validate-skill.py skills/nix-packaging
