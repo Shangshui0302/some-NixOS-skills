@@ -36,6 +36,20 @@ python3 skills/nix-packaging/scripts/validate-skill.py skills/nixos-ecosystem
 The same structural checks, flake checks, and three package outputs run in
 `.github/workflows/ci.yml` when this repository is connected to GitHub.
 
+Run the local freshness report with:
+
+```bash
+python3 scripts/check-freshness.py
+```
+
+`.github/workflows/freshness.yml` also runs weekly or by manual dispatch. It
+resolves a candidate `nixpkgs` lock in a temporary path, checks and builds that
+candidate, then fails with a reviewable report when the lock or documentation
+review is due. It never edits `flake.lock`, commits, pushes, or opens a PR.
+The date check is a reminder, not a semantic web-page diff: the Agent still
+must read the current official documentation when a task reaches the freshness
+gate.
+
 The per-skill outputs and `all-skills` contain complete trees under
 `share/agent-skills/<name>/`. Copy or wire those directories into an agent runtime
 only through the host's normal configuration mechanism. Adding a new skill requires
@@ -46,10 +60,12 @@ flake and aggregate check discover it automatically.
 
 The skill is not a frozen prompt: each applicable task has a freshness gate that
 reads the locked inputs and checks the version-matched official documentation before
-using an unfamiliar option or API. The repository itself does not perform silent
-background updates. A requested update is a reviewable change to the lock, references,
-examples, and evals, followed by the same checks; a future scheduled CI job may
-propose that change but must stop before merge, activation, commit, or push.
+using an unfamiliar option or API. The repository's first-layer freshness workflow
+checks a temporary candidate lock and reports when a human review is needed. A
+requested update is a reviewable change to the lock, references, examples, and evals,
+followed by the same checks; automation stops before merge, activation, commit, or
+push. The source/review schedule is recorded in
+[`docs/freshness-sources.json`](docs/freshness-sources.json).
 
 ## Design choices
 

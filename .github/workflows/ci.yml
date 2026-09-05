@@ -24,6 +24,9 @@ jobs:
           nix develop --command python3 skills/nix-packaging/scripts/validate-skill.py skills/nix-packaging
           nix develop --command python3 skills/nix-packaging/scripts/validate-skill.py skills/nixos-ecosystem
 
+      - name: Check freshness manifest
+        run: nix develop --command python3 scripts/check-freshness.py --format json
+
       - name: Check flake
         run: nix flake check --show-trace
 

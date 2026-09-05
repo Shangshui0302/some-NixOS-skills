@@ -1,0 +1,46 @@
+{
+  "schema": 1,
+  "default_review_interval_days": 30,
+  "sources": [
+    {
+      "id": "nixpkgs-locked-api",
+      "input": "nixpkgs",
+      "url": "https://github.com/NixOS/nixpkgs",
+      "last_reviewed": "2026-09-05",
+      "references": [
+        "skills/nix-packaging/references/freshness-and-evidence.md",
+        "skills/nix-packaging/references/builder-routing.md",
+        "skills/nixos-ecosystem/references/nix-core-and-flakes.md",
+        "skills/nixos-ecosystem/references/ci-updates-and-cache.md"
+      ]
+    },
+    {
+      "id": "nix-manual",
+      "url": "https://nix.dev/manual/nix/latest/",
+      "last_reviewed": "2026-09-05",
+      "references": [
+        "skills/nix-packaging/references/freshness-and-evidence.md",
+        "skills/nixos-ecosystem/references/nix-core-and-flakes.md",
+        "skills/nixos-ecosystem/references/ci-updates-and-cache.md"
+      ]
+    },
+    {
+      "id": "nixos-manual",
+      "url": "https://nixos.org/manual/nixos/unstable/",
+      "last_reviewed": "2026-09-05",
+      "references": [
+        "skills/nixos-ecosystem/references/system-lifecycle.md",
+        "skills/nixos-ecosystem/references/services-and-desktop.md",
+        "skills/nixos-ecosystem/references/deployment-and-testing.md"
+      ]
+    },
+    {
+      "id": "home-manager-manual",
+      "url": "https://nix-community.github.io/home-manager/",
+      "last_reviewed": "2026-09-05",
+      "references": [
+        "skills/nixos-ecosystem/references/configuration-and-home.md"
+      ]
+    }
+  ]
+}

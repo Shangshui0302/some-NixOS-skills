@@ -46,8 +46,11 @@ signing keys or CI tokens in the flake or build logs.
 
 ## Reviewable automation
 
-An update job should detect, propose a branch/PR, run checks, and stop for review.
-It must not silently change skill instructions, activate hosts, delete generations,
-or push credentials. If a NixOS version deprecates an image or deployment command,
-update the reference and its examples together; do not retain stale instructions
-just because an old lock still evaluates.
+The repository's first-layer freshness workflow detects a candidate nixpkgs lock,
+runs the flake checks/builds against it, and stops with a report when review is
+needed. A local equivalent is `python3 scripts/check-freshness.py`. It does not
+silently change skill instructions, activate hosts, delete generations, commit, or
+push credentials. A later update job may propose a branch/PR only after the same
+evidence and checks are available. If a NixOS version deprecates an image or
+deployment command, update the reference and its examples together; do not retain
+stale instructions just because an old lock still evaluates.
