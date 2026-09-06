@@ -1,7 +1,8 @@
 # Builder routing
 
-Choose the narrowest route supported by the evidence. Read only the section for the
-package type under investigation.
+Choose the narrowest route supported by the evidence. This applies whether the
+expression lives in a package repository, standalone file, flake, overlay, or the
+nixpkgs tree. Read only the section for the package type under investigation.
 
 ## Source packages
 
@@ -56,4 +57,7 @@ IPC/log inspection for post-activation validation.
 At minimum, verify `pname`, `version`, description, homepage, license, platforms,
 and `mainProgram` where applicable. Use SRI `hash` values and interpolate version
 variables rather than duplicating literals. Desktop integration is complete only
-when the wrapper, desktop file, icon, and executable agree.
+when the wrapper, desktop file, icon, and executable agree. When a package is
+published through a flake or overlay, preserve its existing attribute and system
+conventions; when a module consumes it, verify that consumer boundary without
+duplicating package ownership.

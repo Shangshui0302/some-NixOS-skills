@@ -1,0 +1,56 @@
+{
+  "skill": "nixpkgs-maintainer",
+  "version": 1,
+  "cases": [
+    {
+      "id": "update-upstream-package",
+      "prompt": "Update an existing package in an NixOS/nixpkgs checkout to a new upstream release.",
+      "must_do": [
+        "verify the target checkout, branch, package path, and current revision",
+        "inspect upstream release notes, lock data, metadata, patches, and affected tests",
+        "run layered package validation and prepare a nixpkgs PR packet"
+      ],
+      "must_not_do": ["treat a version-and-hash edit as sufficient evidence", "push or open a PR without approval"]
+    },
+    {
+      "id": "broken-backport",
+      "prompt": "A nixpkgs package is broken because an upstream fix is merged but not released; repair it with a justified backport.",
+      "must_do": [
+        "reproduce and locate the first failing boundary",
+        "use an immutable upstream source and record the patch removal condition",
+        "separate build, package-test, nixpkgs-review, and runtime evidence"
+      ],
+      "must_not_do": ["hide the failure with doCheck=false or an unexplained dependency", "retain a patch without an expiry condition"]
+    },
+    {
+      "id": "new-package-worthiness",
+      "prompt": "Add a missing upstream application to NixOS/nixpkgs.",
+      "must_do": [
+        "check project maturity, license, usefulness, maintenance commitment, and current package layout",
+        "verify source provenance, builder, metadata, install output, and basic tests",
+        "include maintainers, affected platforms, and any required package tests in the review packet"
+      ],
+      "must_not_do": ["copy machine-specific overlay wiring into nixpkgs", "guess a license, hash, or main program"]
+    },
+    {
+      "id": "review-only",
+      "prompt": "Review a nixpkgs package pull request for correctness without editing the checkout.",
+      "must_do": [
+        "report findings by location and severity with evidence",
+        "check source, metadata, tests, package output, rebuild impact, and patch lifecycle",
+        "state missing validation and stop before modifications"
+      ],
+      "must_not_do": ["apply fixes or rewrite the contributor branch", "call a dry-build a live runtime test"]
+    },
+    {
+      "id": "local-to-upstream",
+      "prompt": "Turn a working local derivation into a contribution to NixOS/nixpkgs.",
+      "must_do": [
+        "identify and remove local machine or consumer assumptions",
+        "compare with current nixpkgs conventions and package anatomy",
+        "validate the upstream-shaped package and document remaining runtime boundaries"
+      ],
+      "must_not_do": ["assume the local overlay is already nixpkgs quality", "submit without responsible-person review and required disclosure"]
+    }
+  ]
+}

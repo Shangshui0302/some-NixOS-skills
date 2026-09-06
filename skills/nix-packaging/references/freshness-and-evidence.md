@@ -1,15 +1,18 @@
 # Freshness and evidence
 
 Use this reference before selecting a builder, changing a hash, or claiming an
-upstream interface is supported.
+upstream interface is supported. It applies to package expressions in a package
+repository, standalone file, flake, overlay, or nixpkgs checkout.
 
 ## 1. Establish the evaluation context
 
-1. Find the target flake and read `flake.lock`.
-2. Record the `nixpkgs` node's locked revision, nar hash, and URL.
+1. Find the target package expression and its repository or flake root.
+2. If the target has `flake.lock`, record the `nixpkgs` node's locked revision, nar
+   hash, and URL. For a nixpkgs checkout or another package repository, record its
+   pinned nixpkgs source or revision instead.
 3. Inspect that exact nixpkgs checkout for the builder, hook, or helper being used.
-4. If no lock exists, state which explicit nixpkgs reference is being used and treat
-   the result as provisional.
+4. If no lock or pin exists, state which explicit nixpkgs reference is being used and
+   treat the result as provisional.
 
 Useful checks include:
 
@@ -62,7 +65,7 @@ AppImage, Electron, or plugin package.
 Before editing, leave a short note in the task or review containing:
 
 ```text
-nixpkgs: <locked revision> / <builder or hook>
+nixpkgs context: <locked revision or explicit reference> / <builder or hook>
 upstream: <immutable tag or commit> / <source or artifact>
 route: <source | binary | AppImage | Electron | data | plugin>
 reason: <one sentence>

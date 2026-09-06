@@ -4,18 +4,23 @@ This skill has an explicit freshness mechanism, not silent background mutation.
 
 ## Manual update
 
-For a package upgrade, re-check the upstream changelog/release, immutable revision,
-artifact layout, license, build files, lockfiles, and every fixed-output hash. Re-run
-the full validation sequence even when the expression change looks mechanical.
+For a package upgrade, regardless of where its expression lives, re-check the
+upstream changelog/release, immutable revision, artifact layout, license, build files,
+lockfiles, and every fixed-output hash. Re-run the full validation sequence even when
+the expression change looks mechanical.
 
-## First-layer automated freshness check
+## Repository automation
 
-This repository's `.github/workflows/freshness.yml` runs weekly or by manual
-dispatch. It resolves a candidate `nixpkgs` lock into a temporary path, runs the
-freshness report, checks the candidate flake, and builds the skill outputs. A
-candidate revision is reported as attention in the summary, and an overdue
-documentation review makes the job fail. It does not edit `flake.lock`, commit,
-push, or open a pull request.
+If the target repository provides an update or freshness workflow, inspect and run
+that workflow as an additional check. Treat its result as evidence, not permission
+to edit locks, activate a system, commit, push, or open a pull request.
+
+When this skill repository is the target, its `.github/workflows/freshness.yml`
+runs weekly or by manual dispatch. It resolves a candidate `nixpkgs` lock into a
+temporary path, runs the freshness report, checks the candidate flake, and builds
+the skill outputs. Candidate revision drift is reported in the summary, while an
+overdue documentation review makes the job fail. It does not edit `flake.lock`,
+commit, push, or open a pull request.
 
 Run the same report locally with:
 
@@ -25,7 +30,7 @@ python3 scripts/check-freshness.py
 
 The documentation date is a review reminder, not a claim that a script can
 understand every upstream wording or API change. The Agent must still inspect
-the current official documentation at the start of a task and record any
+current official documentation at the start of a task and record any
 lock/API drift.
 
 ## Reviewable automated update
@@ -44,7 +49,7 @@ current workflow intentionally stops before this layer.
 
 ## Documentation drift
 
-At the start of a packaging task, compare locked nixpkgs behavior with current
+At the start of a package task, compare locked nixpkgs behavior with current
 official docs. If a process or API changed, open a small maintenance change that
 updates the relevant reference and its examples together. Keep the old lock
 compatible until a deliberate flake update is approved.

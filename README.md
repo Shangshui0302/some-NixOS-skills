@@ -4,9 +4,9 @@
 [![Nix](https://img.shields.io/badge/Nix-flakes-5277C3.svg)](https://nixos.org/)
 [![NixOS](https://img.shields.io/badge/NixOS-workflows-5277C3.svg)](https://nixos.org/)
 
-本项目提供两个可安装的 Agent Skills，帮助 coding agent 开发 Nix 包、管理 NixOS 配置，并分层验证构建与部署结果。
+本项目提供三个可安装的 Agent Skills，帮助 coding agent 开发 Nix 包、维护上游 Nixpkgs 包、管理 NixOS 配置，并分层验证构建与部署结果。
 
-This project provides two installable Agent Skills for developing Nix packages, managing NixOS configurations, and separating build evidence from deployment results.
+This project provides three installable Agent Skills for developing Nix packages, maintaining packages in upstream Nixpkgs, managing NixOS configurations, and separating build evidence from deployment results.
 
 ## 目录 / Contents
 
@@ -17,10 +17,12 @@ This project provides two installable Agent Skills for developing Nix packages, 
 
 ## Skills / 技能
 
-- `nix-packaging`：开发、升级、修复和验证 Nix package。
+- `nix-packaging`：通用 Nix 包开发——从源码、预构建产物或特殊资源构建 derivation，处理 builder、依赖、输出和分层验证。
+- `nixpkgs-maintainer`：面向上游 NixOS/nixpkgs 的包更新、broken triage、patch/backport、审查和 PR 准备。
 - `nixos-ecosystem`：管理 Nix、NixOS、Home Manager、服务、部署和恢复流程。
 
-- `nix-packaging`: develop, upgrade, repair, and verify Nix packages.
+- `nix-packaging`: general Nix package development — derivations from source, prebuilt artifacts, or special resources, with builder, dependency, output, and layered-validation guidance.
+- `nixpkgs-maintainer`: upstream NixOS/nixpkgs package updates, broken-package triage, patch/backport work, review, and PR preparation.
 - `nixos-ecosystem`: manage Nix, NixOS, Home Manager, services, deployment, and recovery workflows.
 
 ## 1. 原生 Agent Skills 安装 / Native installation
@@ -29,12 +31,13 @@ This project provides two installable Agent Skills for developing Nix packages, 
 
 使用跨 Agent 的 [`skills` CLI](https://github.com/vercel-labs/skills) 安装到用户级目录：
 
-Use the cross-agent [`skills` CLI](https://github.com/vercel-labs/skills) to install both skills globally:
+Use the cross-agent [`skills` CLI](https://github.com/vercel-labs/skills) to install all three skills globally:
 
 ```bash
 npx skills add \
   https://github.com/Shangshui0302/some-NixOS-skills \
   --skill nix-packaging \
+  --skill nixpkgs-maintainer \
   --skill nixos-ecosystem \
   --global \
   --agent '*' \
@@ -50,13 +53,13 @@ Send the following prompt to a coding agent that supports Agent Skills:
 ```text
 请使用你自己的 Agent Skills 原生安装机制，从
 https://github.com/Shangshui0302/some-NixOS-skills
-安装 nix-packaging 和 nixos-ecosystem，使用用户级/global scope。
-安装完成后确认两个 skill 都能被发现。不要使用 Nix，也不要把仓库内容复制到项目目录。
+安装 nix-packaging、nixpkgs-maintainer 和 nixos-ecosystem，使用用户级/global scope。
+安装完成后确认三个 skill 都能被发现。不要使用 Nix，也不要把仓库内容复制到项目目录。
 
 Use your native Agent Skills installation mechanism to install
-nix-packaging and nixos-ecosystem from
+nix-packaging, nixpkgs-maintainer, and nixos-ecosystem from
 https://github.com/Shangshui0302/some-NixOS-skills
-for the user/global scope. Verify that both skills are discoverable afterwards.
+for the user/global scope. Verify that all three skills are discoverable afterwards.
 Do not use Nix or copy the repository into the project directory.
 ```
 
@@ -96,6 +99,7 @@ The resulting links are:
 
 ```text
 ~/.agents/skills/nix-packaging
+~/.agents/skills/nixpkgs-maintainer
 ~/.agents/skills/nixos-ecosystem
         -> /nix/store/...-source/skills/<skill>
 ```

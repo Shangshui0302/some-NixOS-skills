@@ -7,13 +7,15 @@ report.
 
 ```bash
 nix-instantiate --parse path/to/package.nix
-nix flake check path:. --no-build
-nix build path:.#pname -L --no-link --print-out-paths
+nix flake check path:. --no-build                         # when a flake is present
+nix build path:.#pname -L --no-link --print-out-paths    # use the target output name
 git diff --check
 ```
 
-Use `nix log path:.#pname` after a failed build. Do not replace a sandbox build with
-an interactive `nix develop` session.
+For an overlay or package consumer, evaluate and build the existing public output
+or consumer check rather than inventing a second package target. Use `nix log
+path:.#pname` after a failed build. Do not replace a sandbox build with an
+interactive `nix develop` session.
 
 ## Output checks by package type
 
@@ -32,8 +34,9 @@ agree, and that no placeholder or fake hash remains.
 ## Integration boundary
 
 Run `nixos-rebuild dry-build --flake path:.` only when the package is wired into a
-NixOS or Home Manager configuration. This proves evaluation and build planning, not
-activation. Keep these states separate:
+NixOS or Home Manager configuration. For another package consumer, run its existing
+evaluation or dry-build check. These prove planning, not activation. Keep these
+states separate:
 
 1. **Derivation build** — the store output was produced.
 2. **Un-deployed smoke** — the output was inspected or safely invoked.

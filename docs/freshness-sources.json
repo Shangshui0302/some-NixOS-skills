@@ -6,10 +6,15 @@
       "id": "nixpkgs-locked-api",
       "input": "nixpkgs",
       "url": "https://github.com/NixOS/nixpkgs",
-      "last_reviewed": "2026-09-05",
+      "last_reviewed": "2026-09-06",
       "references": [
         "skills/nix-packaging/references/freshness-and-evidence.md",
         "skills/nix-packaging/references/builder-routing.md",
+        "skills/nixpkgs-maintainer/references/task-triage-and-evidence.md",
+        "skills/nixpkgs-maintainer/references/package-anatomy.md",
+        "skills/nixpkgs-maintainer/references/validation.md",
+        "skills/nixpkgs-maintainer/references/patch-lifecycle.md",
+        "skills/nixpkgs-maintainer/references/pr-packet.md",
         "skills/nixos-ecosystem/references/nix-core-and-flakes.md",
         "skills/nixos-ecosystem/references/ci-updates-and-cache.md"
       ]

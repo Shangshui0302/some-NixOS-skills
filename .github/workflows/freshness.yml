@@ -39,7 +39,7 @@ jobs:
         run: nix flake check . --reference-lock-file "$RUNNER_TEMP/flake.lock" --no-write-lock-file --show-trace
 
       - name: Build candidate skill outputs
-        run: nix build --reference-lock-file "$RUNNER_TEMP/flake.lock" --no-write-lock-file .#nix-packaging .#nixos-ecosystem .#all-skills --no-link
+        run: nix build --reference-lock-file "$RUNNER_TEMP/flake.lock" --no-write-lock-file .#nix-packaging .#nixpkgs-maintainer .#nixos-ecosystem .#all-skills --no-link
 
       - name: Require review when documentation freshness is overdue
         run: >-

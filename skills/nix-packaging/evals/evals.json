@@ -3,10 +3,10 @@
   "version": 1,
   "cases": [
     {
-      "id": "add-local-package",
-      "prompt": "Package a missing upstream CLI for a flake.",
+      "id": "add-package",
+      "prompt": "Develop a missing upstream CLI package for a package repository, flake, or overlay.",
       "must_do": [
-        "inspect the locked nixpkgs builder",
+        "inspect the target's pinned nixpkgs builder context",
         "collect immutable upstream evidence",
         "build and smoke-test the output"
       ],
@@ -14,7 +14,7 @@
     },
     {
       "id": "upgrade-derivation",
-      "prompt": "Upgrade an existing derivation and refresh its source and dependency hashes.",
+      "prompt": "Upgrade an existing Nix derivation in its package project and refresh its source and dependency hashes.",
       "must_do": [
         "inspect the changelog and lockfiles",
         "refresh fixed-output hashes deliberately",
@@ -31,6 +31,16 @@
         "separate build success from live GUI validation"
       ],
       "must_not_do": ["hide missing dependencies with a default FHS wrapper"]
+    },
+    {
+      "id": "integrate-package-consumer",
+      "prompt": "Expose an existing package through a flake or overlay for a NixOS or Home Manager module consumer.",
+      "must_do": [
+        "inspect the existing package and consumer contracts",
+        "preserve package ownership and public attribute conventions",
+        "evaluate and dry-build the consumer when in scope"
+      ],
+      "must_not_do": ["activate the system as package validation"]
     },
     {
       "id": "review-only",

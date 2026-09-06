@@ -25,6 +25,7 @@ jobs:
       - name: Validate skill structure
         run: |
           nix develop --command python3 skills/nix-packaging/scripts/validate-skill.py skills/nix-packaging
+          nix develop --command python3 skills/nix-packaging/scripts/validate-skill.py skills/nixpkgs-maintainer
           nix develop --command python3 skills/nix-packaging/scripts/validate-skill.py skills/nixos-ecosystem
 
       - name: Check freshness manifest
@@ -34,4 +35,4 @@ jobs:
         run: nix flake check --show-trace
 
       - name: Build skill outputs
-        run: nix build .#nix-packaging .#nixos-ecosystem .#all-skills --no-link
+        run: nix build .#nix-packaging .#nixpkgs-maintainer .#nixos-ecosystem .#all-skills --no-link

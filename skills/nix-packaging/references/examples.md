@@ -1,24 +1,35 @@
-# Request examples
+# Package development examples
 
 These examples define the minimum useful behavior, not literal scripts to copy.
 
-## Add a missing local package
+## Add a package
 
-Input: “Package this upstream CLI for my flake.”
+Input: “Package this upstream CLI for my package repository, flake, or overlay.”
 
-Expected route: search locked nixpkgs first; inspect the upstream build and release
-metadata; choose a source or release route; add a fixed derivation and an explicit
-flake package; build it and run `--version` or an equivalent safe call. Ask before
-connecting it to system or Home Manager packages.
+Expected route: inspect the target's pinned nixpkgs context and search existing
+expressions first; inspect upstream build and release metadata; choose a source or
+release route; add a fixed derivation and preserve the target's package-facing
+surface; build it and run `--version` or an equivalent safe call. Ask before
+connecting it to a system or Home Manager consumer when that is not part of the task.
 
 ## Upgrade an existing derivation
 
-Input: “Update the local package from 1.2 to 1.3.”
+Input: “Update the package from 1.2 to 1.3.”
 
 Expected route: compare the changelog and lockfiles, verify the new tag/artifact,
 refresh source and dependency hashes independently, inspect the diff, rebuild, and
 report any changed runtime or desktop behavior. Do not assume a version-only edit is
 safe.
+
+## Integrate a package surface
+
+Input: “Expose an existing package through the overlay or flake package for a module
+consumer.”
+
+Expected route: inspect the established attribute name, system matrix, overlay
+contract, and consumer imports; change only the requested package-facing surface;
+evaluate and build the package, then run the consumer's dry-build when in scope.
+Do not activate the system as part of package validation.
 
 ## Repair a binary or desktop package
 
