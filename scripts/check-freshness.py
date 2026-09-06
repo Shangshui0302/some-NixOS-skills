@@ -206,6 +206,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--format", choices=("human", "json"), default="human")
     parser.add_argument("--github-summary", type=Path, help="append a compact report to a GitHub Actions summary")
     parser.add_argument("--fail-on-attention", action="store_true", help="exit 2 when drift or review due is found")
+    parser.add_argument("--fail-on-due", action="store_true", help="exit 2 only when a documentation review is due")
     return parser.parse_args()
 
 
@@ -228,6 +229,8 @@ def main() -> int:
     if args.github_summary:
         append_github_summary(args.github_summary, report)
     if args.fail_on_attention and report["status"] != "current":
+        return 2
+    if args.fail_on_due and any(source["due"] for source in report["sources"]):
         return 2
     return 0
 

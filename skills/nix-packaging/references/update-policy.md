@@ -13,9 +13,9 @@ the full validation sequence even when the expression change looks mechanical.
 This repository's `.github/workflows/freshness.yml` runs weekly or by manual
 dispatch. It resolves a candidate `nixpkgs` lock into a temporary path, runs the
 freshness report, checks the candidate flake, and builds the skill outputs. A
-candidate revision or overdue documentation review makes the job fail with a
-reviewable summary. It does not edit `flake.lock`, commit, push, or open a pull
-request.
+candidate revision is reported as attention in the summary, and an overdue
+documentation review makes the job fail. It does not edit `flake.lock`, commit,
+push, or open a pull request.
 
 Run the same report locally with:
 

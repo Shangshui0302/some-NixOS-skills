@@ -41,8 +41,8 @@ jobs:
       - name: Build candidate skill outputs
         run: nix build --reference-lock-file "$RUNNER_TEMP/flake.lock" --no-write-lock-file .#nix-packaging .#nixos-ecosystem .#all-skills --no-link
 
-      - name: Require review when freshness needs attention
+      - name: Require review when documentation freshness is overdue
         run: >-
           nix develop --command python3 scripts/check-freshness.py
           --candidate-lock "$RUNNER_TEMP/flake.lock"
-          --fail-on-attention
+          --fail-on-due
