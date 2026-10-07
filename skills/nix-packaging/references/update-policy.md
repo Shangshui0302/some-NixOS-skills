@@ -18,9 +18,11 @@ to edit locks, activate a system, commit, push, or open a pull request.
 When this skill repository is the target, its `.github/workflows/freshness.yml`
 runs weekly or by manual dispatch. It resolves a candidate `nixpkgs` lock into a
 temporary path, runs the freshness report, checks the candidate flake, and builds
-the skill outputs. Candidate revision drift is reported in the summary, while an
-overdue documentation review makes the job fail. It does not edit `flake.lock`,
-commit, push, or open a pull request.
+the skill outputs. Candidate revision drift and overdue documentation reviews are
+reported in the summary. Overdue reviews also produce GitHub Actions warnings;
+they do not fail the job. Invalid manifests, flake checks, and build errors still
+fail normally. The workflow does not edit `flake.lock`, commit, push, or open a
+pull request.
 
 Run the same report locally with:
 

@@ -5,16 +5,19 @@ large evaluations, and build acceleration.
 
 ## Baseline checks
 
-Keep the cheap checks local and deterministic. Use `nix fmt -- --check` when the
-flake exposes a formatter; otherwise run the repository's declared formatter
-directly:
+Run cheap checks first, then builds. Inspect the flake's formatter before choosing
+its non-mutating check flag: `nix fmt` forwards arguments to that formatter, and
+not every formatter accepts `--check`. If the flake has no formatter, run the
+repository's declared formatter directly with its documented check option:
 
 ```bash
-nix fmt -- --check
+# Only when formatter.<system> supports --check:
+nix fmt --no-update-lock-file --no-write-lock-file -- --check
 statix check
 deadnix --fail
-nix flake check
-nixos-rebuild dry-build --flake .#<host>
+nix flake check --no-update-lock-file --no-write-lock-file
+host=your-config-name
+nixos-rebuild dry-build --flake ".#${host}" --no-update-lock-file --no-write-lock-file
 ```
 
 Use `nixd` or `nil` in the editor with the same flake inputs. Do not make formatting
@@ -47,9 +50,11 @@ signing keys or CI tokens in the flake or build logs.
 ## Reviewable automation
 
 The repository's first-layer freshness workflow detects a candidate nixpkgs lock,
-runs the flake checks/builds against it, and stops with a report when review is
-needed. A local equivalent is `python3 scripts/check-freshness.py`. It does not
-silently change skill instructions, activate hosts, delete generations, commit, or
+runs the flake checks/builds against it, and reports overdue documentation reviews
+as warnings without failing the job. Invalid manifests, flake checks, and build
+errors still fail normally. A local equivalent is
+`python3 scripts/check-freshness.py`. It does not silently change skill
+instructions, activate hosts, delete generations, commit, or
 push credentials. A later update job may propose a branch/PR only after the same
 evidence and checks are available. If a NixOS version deprecates an image or
 deployment command, update the reference and its examples together; do not retain

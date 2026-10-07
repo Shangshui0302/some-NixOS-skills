@@ -30,9 +30,11 @@ authoritative owner.
 
 ## Home Manager modes
 
-Choose explicitly between standalone activation and Home Manager as a NixOS module.
-The module form can activate system and user changes together; standalone mode gives
-the user an independent generation and may be appropriate on non-NixOS systems.
+Choose explicitly between standalone activation, the NixOS module, and the
+nix-darwin module. The integrated forms rebuild user configuration with the system;
+on NixOS, inspect the Home Manager activation service separately after rebuilding.
+Standalone mode gives the user an independent generation and may be appropriate
+on non-NixOS systems.
 Check the chosen mode's activation command and ownership before editing files that
 may already be managed manually.
 

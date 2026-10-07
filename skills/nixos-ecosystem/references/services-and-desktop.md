@@ -5,8 +5,8 @@ desktop sessions, graphics, audio, input, and compositor integrations.
 
 ## Native service first
 
-Ask whether nixpkgs already provides a NixOS or Home Manager module. Prefer the
-native module when it owns package, unit, user, state directory, firewall, and
+Ask whether Nixpkgs provides a NixOS module or Home Manager provides a user module.
+Prefer the native module when it owns package, unit, user, state directory, firewall, and
 reload behavior together. Use a hand-written unit only when the module is absent or
 cannot express the requirement; document the missing boundary.
 
@@ -21,8 +21,10 @@ systemctl status <unit>
 journalctl -b -u <unit> --no-pager
 ```
 
-For user services substitute `systemctl --user`. Verify state directories, dynamic
-users, environment variables, `PATH`, capabilities, sandboxing, and ordering. A
+For user services run `systemctl --user` and
+`journalctl --user -b -u <unit> --no-pager` as the intended user. Verify state
+directories, dynamic users, environment variables, `PATH`, capabilities,
+sandboxing, and ordering. A
 service that starts manually may still fail under systemd's restricted environment.
 
 ## Network and firewall
