@@ -80,6 +80,18 @@ inputs.some-nixos-skills = {
 };
 ```
 
+如果使用 NixOS 的 Home Manager 模块，需要先把 `inputs` 传给 Home Manager 用户模块。在现有 flake 的 `outputs = inputs@{ ... }: ...` 作用域内，为系统配置添加：
+
+When using Home Manager as a NixOS module, first pass `inputs` to the Home Manager user modules. In the existing flake's `outputs = inputs@{ ... }: ...` scope, add this option to the system configuration:
+
+```nix
+home-manager.extraSpecialArgs = { inherit inputs; };
+```
+
+如果使用独立的 `homeManagerConfiguration`，则在其参数中设置 `extraSpecialArgs = { inherit inputs; };`。
+
+For a standalone `homeManagerConfiguration`, set `extraSpecialArgs = { inherit inputs; };` in its arguments instead.
+
 然后在现有的 Home Manager 用户模块中导入并启用：
 
 Then import and enable it in your existing Home Manager user module:
@@ -93,9 +105,9 @@ Then import and enable it in your existing Home Manager user module:
 }
 ```
 
-生成后得到：
+激活后，以下链接最终指向：
 
-The resulting links are:
+After activation, these links ultimately resolve to:
 
 ```text
 ~/.agents/skills/nix-packaging

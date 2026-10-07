@@ -17,12 +17,14 @@ repository, standalone file, flake, overlay, or nixpkgs checkout.
 Useful checks include:
 
 ```bash
-nix flake metadata --json path:. | jq '.locks.nodes.nixpkgs'
-nix eval --impure --expr '
-  let f = builtins.getFlake (toString ./.) in
-  builtins.attrNames f.inputs
-'
+nix flake metadata --no-update-lock-file --no-write-lock-file --json path:. |
+  jq '.locks as $locks | { nixpkgs: $locks.nodes.nixpkgs, inputs: $locks.nodes[$locks.root].inputs }'
 ```
+
+This reports the locked nixpkgs node and declared root input edges. The flags reject
+required lock changes and prevent writing a generated lock; input fetching and
+store/cache updates can still occur. String-based `builtins.getFlake` remains
+supported, but is not needed for this lock-graph inspection.
 
 Do not use a registry or an unpinned channel as proof of the target flake's API.
 

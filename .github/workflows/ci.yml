@@ -31,6 +31,9 @@ jobs:
       - name: Check freshness manifest
         run: nix develop --command python3 scripts/check-freshness.py --format json
 
+      - name: Test freshness reporting
+        run: nix develop --command python3 -m unittest discover -s tests -v
+
       - name: Check flake
         run: nix flake check --show-trace
 

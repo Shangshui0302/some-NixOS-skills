@@ -6,7 +6,7 @@
       "id": "nixpkgs-locked-api",
       "input": "nixpkgs",
       "url": "https://github.com/NixOS/nixpkgs",
-      "last_reviewed": "2026-09-06",
+      "last_reviewed": "2026-10-07",
       "references": [
         "skills/nix-packaging/references/freshness-and-evidence.md",
         "skills/nix-packaging/references/builder-routing.md",
@@ -23,7 +23,7 @@
       "id": "home-manager-locked-api",
       "input": "home-manager",
       "url": "https://github.com/nix-community/home-manager",
-      "last_reviewed": "2026-09-05",
+      "last_reviewed": "2026-10-07",
       "references": [
         "skills/nixos-ecosystem/references/configuration-and-home.md"
       ]
@@ -31,7 +31,7 @@
     {
       "id": "nix-manual",
       "url": "https://nix.dev/manual/nix/latest/",
-      "last_reviewed": "2026-09-05",
+      "last_reviewed": "2026-10-07",
       "references": [
         "skills/nix-packaging/references/freshness-and-evidence.md",
         "skills/nixos-ecosystem/references/nix-core-and-flakes.md",
@@ -41,7 +41,7 @@
     {
       "id": "nixos-manual",
       "url": "https://nixos.org/manual/nixos/unstable/",
-      "last_reviewed": "2026-09-05",
+      "last_reviewed": "2026-10-07",
       "references": [
         "skills/nixos-ecosystem/references/system-lifecycle.md",
         "skills/nixos-ecosystem/references/services-and-desktop.md",
@@ -51,7 +51,7 @@
     {
       "id": "home-manager-manual",
       "url": "https://nix-community.github.io/home-manager/",
-      "last_reviewed": "2026-09-05",
+      "last_reviewed": "2026-10-07",
       "references": [
         "skills/nixos-ecosystem/references/configuration-and-home.md"
       ]

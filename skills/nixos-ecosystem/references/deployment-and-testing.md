@@ -6,8 +6,9 @@ containers, and microVMs.
 ## Choose the smallest target
 
 1. Evaluate and dry-build locally.
-2. Run a focused NixOS VM test or `build-vm` when the behavior crosses systemd,
-   boot, networking, or user-session boundaries.
+2. Run a focused NixOS VM test, or build and launch a VM with
+   `nixos-rebuild build-vm` and the generated `result/bin/run-*-vm` script, when
+   behavior crosses systemd, boot, networking, or user-session boundaries.
 3. Test on a disposable host or one canary.
 4. Deploy one remote node, observe, then expand to a fleet.
 
@@ -22,8 +23,11 @@ it. Never aim an unattended install at an unverified production host.
 
 ## Remote deployment
 
-For a small number of hosts, start with `nixos-rebuild --target-host` and explicit
-`--flake host` selection. For multiple hosts, compare deploy-rs and Colmena:
+For a small number of hosts, select the action, remote target, and flake output
+explicitly: `nixos-rebuild <action> --target-host <user@target> --flake .#host`.
+Building is local unless `--build-host` is set; remote activation needs root access
+or an explicitly selected supported elevation method. For multiple hosts, compare
+deploy-rs and Colmena:
 
 - deploy-rs exposes deployment checks and can roll back successful peers when a
   multi-target deployment fails;
