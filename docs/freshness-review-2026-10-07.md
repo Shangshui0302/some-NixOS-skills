@@ -20,9 +20,10 @@ prove that every external packaging example builds.
   and `home.stateVersion = "25.11"`. The repository's module API is compatible.
   Added the missing `extraSpecialArgs` prerequisite to the README example.
 - **nix-manual:** checked the current Nix manual (2.35.2) for flake inspection,
-  lock options, evaluation/build boundaries, formatter argument forwarding, and
-  import-from-derivation. Guarded checkout/lock inspection examples, clarified
-  system-keyed outputs, and made host selection explicit.
+  lock options and arbitrary node labels/follows, evaluation/build boundaries,
+  formatter argument forwarding, and import-from-derivation. Guarded checkout/lock
+  inspection examples, clarified system-keyed outputs, and made host selection
+  explicit.
 - **nixos-manual:** checked the current unstable manual (26.11), locked
   `nixos-rebuild-ng`, activation code, and testing interfaces. Corrected lifecycle
   side effects, incomplete dry-activation previews, VM build versus runtime

@@ -7,9 +7,9 @@ repository, standalone file, flake, overlay, or nixpkgs checkout.
 ## 1. Establish the evaluation context
 
 1. Find the target package expression and its repository or flake root.
-2. If the target has `flake.lock`, record the `nixpkgs` node's locked revision, nar
-   hash, and URL. For a nixpkgs checkout or another package repository, record its
-   pinned nixpkgs source or revision instead.
+2. If the target has `flake.lock`, resolve the root `nixpkgs` input to its node and
+   record that node's locked revision, nar hash, and URL. For a nixpkgs checkout or
+   another package repository, record its pinned nixpkgs source or revision instead.
 3. Inspect that exact nixpkgs checkout for the builder, hook, or helper being used.
 4. If no lock or pin exists, state which explicit nixpkgs reference is being used and
    treat the result as provisional.
@@ -18,13 +18,15 @@ Useful checks include:
 
 ```bash
 nix flake metadata --no-update-lock-file --no-write-lock-file --json path:. |
-  jq '.locks as $locks | { nixpkgs: $locks.nodes.nixpkgs, inputs: $locks.nodes[$locks.root].inputs }'
+  jq '.locks | {root, nodes}'
 ```
 
-This reports the locked nixpkgs node and declared root input edges. The flags reject
-required lock changes and prevent writing a generated lock; input fetching and
-store/cache updates can still occur. String-based `builtins.getFlake` remains
-supported, but is not needed for this lock-graph inspection.
+Start at `nodes[root].inputs.nixpkgs` and resolve its node label or follows path;
+record the resolved node's `locked` attributes. Node labels are arbitrary, so do
+not assume the node label equals the input name. The flags reject required lock
+changes and prevent writing a generated lock; input fetching and store/cache
+updates can still occur. String-based `builtins.getFlake` remains supported, but
+is not needed for this lock-graph inspection.
 
 Do not use a registry or an unpinned channel as proof of the target flake's API.
 
